@@ -2,6 +2,8 @@
 
 namespace JMac\TestingStrategies;
 
+use JMac\TestingStrategies\Models\Order;
+
 class InvoiceGenerator
 {
     public function generate()
@@ -14,22 +16,22 @@ class InvoiceGenerator
         );
 
         $result = $mysqli->query('SELECT * FROM orders WHERE complete = 1', MYSQLI_USE_RESULT);
-        while ($order = $result->fetch_assoc()) {
-            file_put_contents($order['id'] . '.pdf', $this->createInvoice($order));
+        while ($order = $result->fetch_object(Order::class)) {
+            file_put_contents($order->id . '.pdf', $this->createInvoice($order));
         }
     }
 
-    private function createInvoice(array $order): string
+    private function createInvoice(Order $order): string
     {
         $pdf = new \FPDF();
         $pdf->AddPage();
-        $pdf->SetFont('Arial','',16);
-        $pdf->Cell(40,6,$order['item'],'LR');
-        $pdf->Cell(10,6,$order['quantity'],'LR');
-        $pdf->Cell(25,6,number_format($order['amount']),'LR',0,'R');
-        $pdf->Cell(25,6,number_format($order['subtotal']),'LR',0,'R');
+        $pdf->SetFont('Arial', '', 16);
+        $pdf->Cell(40, 6, $order->item, 'LR');
+        $pdf->Cell(10, 6, $order->quantity, 'LR');
+        $pdf->Cell(25, 6, number_format($order->amount), 'LR', 0, 'R');
+        $pdf->Cell(25, 6, number_format($order->subtotal), 'LR', 0, 'R');
         $pdf->Ln();
-        $pdf->Cell(100,0,'','T');
+        $pdf->Cell(100, 0, '', 'T');
         $pdf->Output();
     }
 }
