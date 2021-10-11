@@ -26,12 +26,10 @@ class InvoiceGenerator
         $pdf = new \FPDF();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 16);
-        $pdf->Cell(40, 6, $order->item, 'LR');
-        $pdf->Cell(10, 6, $order->quantity, 'LR');
-        $pdf->Cell(25, 6, number_format($order->amount), 'LR', 0, 'R');
-        $pdf->Cell(25, 6, number_format($order->subtotal), 'LR', 0, 'R');
-        $pdf->Ln();
-        $pdf->Cell(100, 0, '', 'T');
+        $pdf->Cell(40, 6, $order->item, 'TBL');
+        $pdf->Cell(10, 6, $order->quantity, 'TBL');
+        $pdf->Cell(25, 6, number_format($order->amount), 'TBL', 0, 'R');
+        $pdf->Cell(25, 6, number_format($order->subtotal), 'TRBL', 0, 'R');
 
         return $pdf->Output('S');
     }
