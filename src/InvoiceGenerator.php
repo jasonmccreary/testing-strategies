@@ -6,15 +6,8 @@ use JMac\TestingStrategies\Models\Order;
 
 class InvoiceGenerator
 {
-    public function generate()
+    public function generate(\mysqli $mysqli)
     {
-        $mysqli = new \mysqli(
-            'localhost',
-            'my_user',
-            'my_password',
-            'application'
-        );
-
         $result = $mysqli->query('SELECT * FROM orders WHERE complete = 1', MYSQLI_USE_RESULT);
         while ($order = $result->fetch_object(Order::class)) {
             file_put_contents($order->id . '.pdf', $this->createInvoice($order));
