@@ -32,6 +32,7 @@ class InvoiceGenerator
         $pdf->Cell(25, 6, number_format($order->subtotal), 'LR', 0, 'R');
         $pdf->Ln();
         $pdf->Cell(100, 0, '', 'T');
-        $pdf->Output();
+
+        return $pdf->Output('S');
     }
 }
