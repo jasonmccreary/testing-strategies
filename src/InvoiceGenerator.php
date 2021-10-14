@@ -17,18 +17,7 @@ class InvoiceGenerator
     {
         $result = $mysqli->query('SELECT * FROM orders WHERE complete = 1', MYSQLI_USE_RESULT);
         while ($order = $result->fetch_object(Order::class)) {
-            file_put_contents($order->id . '.pdf', $this->createInvoice($order));
+            $this->pdfGenerator->createInvoice($order);
         }
-    }
-
-    private function createInvoice(Order $order): string
-    {
-        $pdf = $this->pdfGenerator->create();
-        $pdf->Cell(40, 6, $order->item, 'TBL');
-        $pdf->Cell(10, 6, $order->quantity, 'TBL');
-        $pdf->Cell(25, 6, number_format($order->amount, 2), 'TBL', 0, 'R');
-        $pdf->Cell(25, 6, number_format($order->subtotal, 2), 'TRBL', 0, 'R');
-
-        return $pdf->Output('S');
     }
 }
