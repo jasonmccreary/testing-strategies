@@ -4,6 +4,7 @@ namespace Tests;
 
 use JMac\TestingStrategies\InvoiceGenerator;
 use JMac\TestingStrategies\Models\Order;
+use JMac\TestingStrategies\PdfGenerator;
 
 class InvoiceGeneratorTest extends TestCase
 {
@@ -25,7 +26,13 @@ class InvoiceGeneratorTest extends TestCase
             ->with('SELECT * FROM orders WHERE complete = 1', MYSQLI_USE_RESULT)
             ->andReturn($resultset);
 
-        $subject = new InvoiceGenerator();
+        $pdf = \Mockery::mock();
+
+        $pdfGenerator = \Mockery::mock(PdfGenerator::class);
+        $pdfGenerator->expects('create')
+            ->andReturn($pdf);
+
+        $subject = new InvoiceGenerator($pdfGenerator);
         $subject->generate($db);
 
         $this->assertFileExists('123.pdf');
