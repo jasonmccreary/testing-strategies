@@ -27,6 +27,17 @@ class InvoiceGeneratorTest extends TestCase
             ->andReturn($resultset);
 
         $pdf = \Mockery::mock();
+        $pdf->expects('Cell')
+            ->with(40, 6, 'Testing an item', 'TBL');
+        $pdf->expects('Cell')
+            ->with(10, 6, 10, 'TBL');
+        $pdf->expects('Cell')
+            ->with(25, 6, '5.00', 'TBL', 0, 'R');
+        $pdf->expects('Cell')
+            ->with(25, 6, '50.00', 'TRBL', 0, 'R');
+        $pdf->expects('Output')
+            ->with('S')
+            ->andReturn('the pdf output');
 
         $pdfGenerator = \Mockery::mock(PdfGenerator::class);
         $pdfGenerator->expects('create')
@@ -35,6 +46,6 @@ class InvoiceGeneratorTest extends TestCase
         $subject = new InvoiceGenerator($pdfGenerator);
         $subject->generate($db);
 
-        $this->assertFileExists('123.pdf');
+        $this->assertStringEqualsFile('123.pdf', 'the pdf output');
     }
 }
