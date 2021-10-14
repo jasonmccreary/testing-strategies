@@ -11,18 +11,8 @@ class InvoiceGeneratorTest extends TestCase
 {
     public function testGenerate()
     {
-        $order1 = \Mockery::mock(Order::class);
-        $order1->id = 123;
-        $order1->item = 'Testing an item';
-        $order1->quantity = 10;
-        $order1->amount = 5.00;
-        $order1->subtotal = 50.00;
-        $order2 = \Mockery::mock(Order::class);
-        $order2->id = 123;
-        $order2->item = 'Testing an item';
-        $order2->quantity = 10;
-        $order2->amount = 5.00;
-        $order2->subtotal = 50.00;
+        $order1 = new Order();
+        $order2 = new Order();
 
         $orderRepository = \Mockery::mock(OrderRepository::class);
         $orderRepository->expects('completed')
