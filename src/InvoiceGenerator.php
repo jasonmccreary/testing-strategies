@@ -2,21 +2,21 @@
 
 namespace JMac\TestingStrategies;
 
-use JMac\TestingStrategies\Models\Order;
-
 class InvoiceGenerator
 {
     private $pdfGenerator;
+    private $invoiceRepository;
 
-    public function __construct($pdfGenerator)
+    public function __construct($pdfGenerator, $orderRepository)
     {
         $this->pdfGenerator = $pdfGenerator;
+        $this->invoiceRepository = $orderRepository;
     }
 
-    public function generate(\mysqli $mysqli)
+    public function generate()
     {
-        $result = $mysqli->query('SELECT * FROM orders WHERE complete = 1', MYSQLI_USE_RESULT);
-        while ($order = $result->fetch_object(Order::class)) {
+        $orders = $this->invoiceRepository->completed();
+        foreach ($orders as $order) {
             $this->pdfGenerator->createInvoice($order);
         }
     }
